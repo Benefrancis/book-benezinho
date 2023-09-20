@@ -22,7 +22,7 @@ public class PessoaFisicaRepository implements Repository<PessoaFisica, Long> {
         EntityManager manager = factory.createEntityManager();
         List<PessoaFisica> list = manager.createQuery(jpql).getResultList();
         manager.close();
-        return  list;
+        return list;
     }
 
     @Override
@@ -35,13 +35,13 @@ public class PessoaFisicaRepository implements Repository<PessoaFisica, Long> {
 
     @Override
     public List<PessoaFisica> findByName(String texto) {
-        String jpql = "FROM PessoaFisica p where p.name=:name";
+        String jpql = "FROM PessoaFisica p where Lower(p.name)=:name";
         EntityManager manager = factory.createEntityManager();
         Query query = manager.createQuery(jpql);
         query.setParameter("name", texto);
         List<PessoaFisica> list = query.getResultList();
         manager.close();
-        return  list;
+        return list;
     }
 
     @Override
