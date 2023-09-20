@@ -6,8 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "TB_PESSOA")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TP_PESSOA")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Pessoa {
 
     @Id
