@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @DiscriminatorValue("PJ")
 public class PessoaJuridica extends Pessoa {
 
-    @Column(name = "NR_CNPJ", nullable = false)
+    @Column(name = "NR_CNPJ", nullable = true)
     String cnpj;
 
 

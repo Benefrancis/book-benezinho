@@ -43,6 +43,7 @@ public class Main {
         Map<String, Object> properties = new HashMap<>();
 
         for (String chave : env.keySet()) {
+            System.out.println(chave);
             if (chave.contains( "USER_FIAP" )) {
                 properties.put( "jakarta.persistence.jdbc.user", env.get( chave ) );
             }
