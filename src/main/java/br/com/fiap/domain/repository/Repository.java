@@ -27,6 +27,7 @@ public interface Repository<T, U> {
                 properties.put("jakarta.persistence.jdbc.password", env.get(chave));
             }
             // Outras configurações de propriedade ....
+            properties.put( "hibernate.hbm2ddl.auto", "update" );
         }
         return properties;
     }
