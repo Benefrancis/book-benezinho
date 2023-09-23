@@ -13,7 +13,7 @@ public class EntityManagerFactoryProvider implements Factory<EntityManagerFactor
     private final EntityManagerFactory emf;
 
     private EntityManagerFactoryProvider(String persistenceUnit) {
-        emf = Persistence.createEntityManagerFactory( persistenceUnit, getProperties() );
+        emf = Persistence.createEntityManagerFactory( "oracle", getProperties() );
     }
 
     public static EntityManagerFactoryProvider build(String persistenceUnit) {
@@ -21,7 +21,7 @@ public class EntityManagerFactoryProvider implements Factory<EntityManagerFactor
         if (Objects.nonNull( result )) return result;
         synchronized (EntityManagerFactoryProvider.class) {
             if (Objects.isNull( instance )) {
-                instance = new EntityManagerFactoryProvider( persistenceUnit );
+                instance = new EntityManagerFactoryProvider( "oracle" );
             }
             return result;
         }
