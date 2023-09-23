@@ -1,55 +1,60 @@
 package br.com.fiap.domain.repository;
 
 import br.com.fiap.domain.entity.PessoaFisica;
-import br.com.fiap.infra.EntityManagerFactoryProvider;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PessoaFisicaRepository implements Repository<PessoaFisica, Long> {
 
-    private EntityManagerFactory factory;
+    private static volatile PessoaFisicaRepository instance;
+    private EntityManager manager;
 
-    public PessoaFisicaRepository() {
-          factory = EntityManagerFactoryProvider.build( "oracle" ).provide();
+    private PessoaFisicaRepository(EntityManager manager) {
+        this.manager = manager;
     }
+
+    public static PessoaFisicaRepository build(EntityManager manager) {
+        PessoaFisicaRepository result = instance;
+        if (Objects.nonNull( result )) return result;
+
+        synchronized (PessoaFisicaRepository.class) {
+            if (Objects.isNull( instance )) {
+                instance = new PessoaFisicaRepository( manager );
+            }
+            return instance;
+        }
+    }
+
 
     @Override
     public List<PessoaFisica> findAll() {
-        String jpql = "FROM PessoaFisica p";
-        EntityManager manager = factory.createEntityManager();
-        List<PessoaFisica> list = manager.createQuery( jpql ).getResultList();
-        manager.close();
+        List<PessoaFisica> list = manager.createQuery( "FROM PessoaFisica" ).getResultList();
         return list;
     }
 
     @Override
     public PessoaFisica findById(Long id) {
-        EntityManager manager = factory.createEntityManager();
-        PessoaFisica pessoaFisica = manager.find( PessoaFisica.class, id );
-        manager.close();
-        return pessoaFisica;
+        PessoaFisica pessoa = manager.find( PessoaFisica.class, id );
+        return pessoa;
     }
 
     @Override
     public List<PessoaFisica> findByName(String texto) {
-        String jpql = "FROM PessoaFisica p where Lower(p.name)=:name";
-        EntityManager manager = factory.createEntityManager();
+        String jpql = "SELECT p FROM PessoaFisica p  where lower(p.nome) LIKE CONCAT('%',lower(:nome),'%')";
         Query query = manager.createQuery( jpql );
-        query.setParameter( "name", texto );
+        query.setParameter( "nome", texto );
         List<PessoaFisica> list = query.getResultList();
-        manager.close();
         return list;
     }
 
     @Override
-    public PessoaFisica persist(PessoaFisica pessoaFisica) {
-        EntityManager manager = factory.createEntityManager();
+    public PessoaFisica persist(PessoaFisica pessoa) {
         manager.getTransaction().begin();
-        manager.persist( pessoaFisica );
+        manager.persist( pessoa );
         manager.getTransaction().commit();
-        return pessoaFisica;
+        return pessoa;
     }
 }

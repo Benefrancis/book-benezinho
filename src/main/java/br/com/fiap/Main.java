@@ -19,6 +19,7 @@ public class Main {
 
     public static final String BASE_URI = "http://localhost/";
 
+    public static final String PERSISTENCE_UNIT = "oracle";
 
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig()
@@ -37,7 +38,7 @@ public class Main {
                             }
                         }
                 )
-                .register( EntityManagerFactoryProvider.build( "oracle" ).provide() )
+                .register( EntityManagerFactoryProvider.build( PERSISTENCE_UNIT ).provide() )
                 .packages( "br.com.fiap.domain.resources" );
         return GrizzlyHttpServerFactory.createHttpServer( URI.create( BASE_URI ), rc );
     }
